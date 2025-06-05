@@ -1,4 +1,4 @@
 # MGE-LDM
-Official implementation of the paper MGE-LDM: Joint Latent Diffusion for Simultaneous Music Generation and Source Extraction
+Official implementation of the paper MGE-LDM: Joint Latent Diffusion for Simultaneous Music Generation and Source Extraction.
 
 The code will be available soon!
