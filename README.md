@@ -48,7 +48,6 @@
    ```
    pip install -r requirements.txt
    ```
-
 ---
 
 ## 💾 Model Checkpoints
@@ -84,6 +83,7 @@ CONFIG_NAME="default_ae" # See configs/default_ae.yaml for details.
 GPU=0 # Set GPU ID
 CKPT_PATH="" # Optional: Path to resume training
 
+## Set CPU cores with `taskset -c` command.
 CUDA_VISIBLE_DEVICES=$GPU \
 taskset -c 64-79 \
 python train_ae.py \
@@ -98,7 +98,6 @@ After training, unwrap the AutoEncoder from pytorch lightning trainer by running
 
 ```bash
 ## See scripts/unwrap_ae_script.sh
-## Set CPU cores with `taskset -c` command.
 GPU=0 # Set GPU ID
 CKPT_DIR="...MGE_LDM/default_ae/checkpoints/"
 CKPT_PATH=$CKPT_DIR"last.ckpt"
@@ -183,6 +182,30 @@ save_dir=$SAVE_DIR
 # torchrun --nproc_per_node gpu train_dit.py \
 # --config-name $CONFIG_NAME \
 # save_dir=$SAVE_DIR
+```
+
+After training, unwrap DiT from pytorch lightning trainer by running the following script:
+
+```bash scripts/unwrap_dit_script.sh```
+
+```bash
+## See scripts/unwrap_dit_script.sh
+
+GPU=0 # Set GPU ID
+## Set config name / checkpoint path to unwrap.
+CONFIG_NAME="dit"
+CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
+CKPT_PATH=$CKPT_DIR"last.ckpt"
+
+OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+
+CUDA_VISIBLE_DEVICES=$GPU \
+python unwrap_model.py \
+    --config-name $CONFIG_NAME \
+    +type=mgeldm \
+    ckpt_path=${CKPT_PATH} \
+    +use_safetensors=false \
+    +output_name=${OUTPUT_PATH}
 ```
 
 
