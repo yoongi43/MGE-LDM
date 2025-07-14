@@ -1,0 +1,78 @@
+
+sample_rate: 16000 ## Same config as the autoencoder
+audio_channels: 1 ## Same config as the autoencoder
+# sample_size: 163840 ## 163840/2048 = 80 ## 80 latent frames
+# segment_length: 80 ## latent frames 
+sample_size: 204800
+segment_length: 100 ## latent frames, 100 * 2048 = 204800 samples
+timestep_eps: 0.02 ## should be the same as trainer.dit.timestep_eps
+
+conditioner:
+  clap_text: ## On-the-fly clap embedding calculation.
+    cond_key: "prompt_cond" ## key in the dataloader
+    config:
+      output_dim: 512
+      clap_ckpt_path: "/data2/yoongi/dataset/pre_trained/music_audioset_epoch_15_esc_90.14.pt"
+      use_text_features: false ## Using non-aggregated text features in CLAP
+      feature_layer_ix: null
+      audio_model_type: "HTSAT-base"
+      enable_fusion: false
+      project_out: false
+      finetune: false
+  ## clap_audio: we pre-extract the CLAP audio embeddings
+
+  ## We pre-extract the CLAP embeddings for the audio files
+  ## TODO: on-the-fly CLAP embedding calculation
+  # clap_audio:
+  #   cond_key: "audio_cond"
+  #   ...
+
+pretransform: ## Autoencoder
+  iterate_batch: false
+  scale: 1.0
+  model_half: false
+  chunked: false
+  enable_grad: false
+  
+  ae_config: ### Same config as the autoencoder
+    encoder:
+      in_channels: ${....audio_channels}
+      channels: 128
+      c_mults: [1, 2, 4, 8, 16]
+      strides: [2, 4, 4, 8, 8]
+      latent_dim: 128 ## VAE
+      use_snake: true
+    decoder:
+      out_channels: ${....audio_channels}
+      channels: 128
+      c_mults: [1, 2, 4, 8, 16]
+      strides: [2, 4, 4, 8, 8]
+      latent_dim: 64
+      use_snake: true
+      final_tanh: false
+    bottleneck:
+      type: "vae"
+    latent_dim: 64
+    downsampling_ratio: 2048
+    io_channels: ${...audio_channels}
+
+MGELDM:
+  ## io channels: ae_config.latent_dim
+  io_channels: ${..pretransform.ae_config.latent_dim}
+  num_tracks: 3
+  embed_dim: 512
+  global_cond_dim: 512
+  global_cond_grouped: true
+  timestep_features_dim: 256
+  depth: 24
+  num_heads: 48
+  norm_type: "groupnorm" # or layernorm
+  use_t_emb_trackwise: true
+  diffusion_objective: "v"
+  global_cond_keys: ## Keys to get from the dataloader
+    - "prompt_cond" ## CLAP text embedding
+    - "audio_cond" ## CLAP audio embedding
+
+  
+
+

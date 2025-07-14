@@ -1,0 +1,64 @@
+# """
+# loaders for pre-extracted latents from autoencoder and CLAP embeddings
+# Need to run extract_latents.py first. 
+# """
+
+num_examples_train: 64000
+loudness_cutoff: -40
+num_tracks_debug: null
+# num_tracks_debug: 1
+zero_diff_threshold: 0.1
+
+data_dir: "/data2/yoongi/dataset/pre_extracted_latents_2"
+zero_latent_name: "zero_latent.npy"
+
+train:
+  slakh2100:
+    data_dir: ${...data_dir}/slakh2100
+    split: train
+    loudness_cutoff: ${...loudness_cutoff}
+    num_examples: ${...num_examples_train}
+    zero_diff_threshold: ${...zero_diff_threshold}
+    zero_latent_path: ${...data_dir}/${...zero_latent_name}
+    state_id: null
+    num_tracks_debug: ${...num_tracks_debug}
+
+  musdb18:
+    data_dir: ${...data_dir}/musdb18
+    split: train
+    loudness_cutoff: ${...loudness_cutoff}
+    num_examples: ${...num_examples_train}
+    zero_diff_threshold: ${...zero_diff_threshold}
+    zero_latent_path: ${...data_dir}/${...zero_latent_name}
+    state_id: null
+    num_tracks_debug: ${...num_tracks_debug}
+
+  moisesdb:
+    data_dir: ${...data_dir}/moisesdb
+    split: train
+    loudness_cutoff: ${...loudness_cutoff}
+    num_examples: ${...num_examples_train}
+    zero_diff_threshold: ${...zero_diff_threshold}
+    zero_latent_path: ${...data_dir}/${...zero_latent_name}
+    state_id: null
+    num_tracks_debug: ${...num_tracks_debug}
+
+  medleydb2:
+    data_dir: ${...data_dir}/medleydbv2
+    split: null
+    loudness_cutoff: ${...loudness_cutoff}
+    num_examples: ${...num_examples_train}
+    zero_diff_threshold: ${...zero_diff_threshold}
+    zero_latent_path: ${...data_dir}/${...zero_latent_name}
+    state_id: null
+    num_tracks_debug: ${...num_tracks_debug}
+
+  other_tracks:
+    data_dir: ${...data_dir}/other_tracks
+    split: null
+    loudness_cutoff: ${...loudness_cutoff}
+    num_examples: ${...num_examples_train}
+    zero_diff_threshold: ${...zero_diff_threshold}
+    zero_latent_path: ${...data_dir}/${...zero_latent_name}
+    state_id: null
+    num_tracks_debug: ${...num_tracks_debug}

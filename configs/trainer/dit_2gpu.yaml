@@ -1,0 +1,58 @@
+
+accelerator: gpu
+devices: -1
+precision: "16-mixed"
+
+strategy: "ddp"
+num_nodes: 1
+num_gpus: 2
+accumulate_grad_batches: 1
+max_epochs: 140
+gradient_clip_val: 1.0
+
+use_ema: true
+
+log_loss_info: false
+
+optimizer_configs:
+  diffusion:
+    optimizer:
+      type: AdamW
+      config:
+        lr: 5e-5
+        betas: [0.9, 0.999]
+        weight_decay: 0.001
+    scheduler:
+      type: InverseLR
+      config:
+        inv_gamma: 1000000
+        power: 0.5
+        warmup: 0.99
+
+pre_encoded: true
+cfg_dropout_prob: 0.4
+timestep_sampler: "uniform"
+timestep_dropout_prob: 0.75
+timestep_eps: 0.02
+mask_loss_track: null ## specified when mix-only pre-training
+
+logging_config:
+  log_every: 20
+
+demo:
+  demo_every: 10000
+  demo_steps: 100
+  num_demos: 8
+  t_min: ${..timestep_eps}
+  demo_conditioning: null
+  demo_cond_from_batch: true
+  demo_cfg_scales: [3.0]
+
+checkpoint:
+  every_n_train_steps: 10000
+  save_top_k: 1
+  # monitor: train/mse_loss
+  save_last: true
+
+tqdm:
+  refresh_rate: 1

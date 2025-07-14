@@ -1,0 +1,26 @@
+
+sample_rate: 16000
+sample_size: 32768
+audio_channels: 1
+
+model:
+  encoder:
+    in_channels: ${...audio_channels}
+    channels: 128
+    c_mults: [1, 2, 4, 8, 16]
+    strides: [2, 4, 4, 8, 8]
+    latent_dim: 128 ## VAE
+    use_snake: true
+  decoder:
+    out_channels: ${...audio_channels}
+    channels: 128
+    c_mults: [1, 2, 4, 8, 16]
+    strides: [2, 4, 4, 8, 8]
+    latent_dim: 64
+    use_snake: true
+    final_tanh: false
+  bottleneck:
+    type: "vae"
+  latent_dim: 64
+  downsampling_ratio: 2048
+  io_channels: ${..audio_channels}

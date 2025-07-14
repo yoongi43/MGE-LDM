@@ -1,0 +1,66 @@
+"""
+loaders for pre-extracted latents from autoencoder and CLAP embeddings
+Need to run extract_latents.py first. 
+"""
+
+num_examples_train: 64000
+num_examples_valid: 800
+loudness_cutoff: -40
+mixture_prob: 0.7
+num_tracks_debug: null
+
+data_dir: "/data2/yoongi/dataset/pre_extracted_latents_2"
+
+train:
+  slakh2100:
+    data_dir: "/data2/yoongi/dataset/slakh2100_inst/slakh2100_flac_redux_wav/"
+    loudness_cutoff: ${...loudness_cutoff}
+    mixture_prob: ${...mixture_prob}
+    num_examples: ${...num_examples_train}
+    state_id: null
+    num_tracks_debug: ${...num_tracks_debug}
+  musdb18:
+    data_dir: "/data2/yoongi/dataset/musdb18hq_from_zenodo"
+    loudness_cutoff: ${...loudness_cutoff}
+    mixture_prob: ${...mixture_prob}
+    num_examples: ${...num_examples_train}
+    state_id: null
+  moisesdb:
+    data_dir: "/data2/yoongi/dataset/moisesdb/moisesdb_v0.1"
+    loudness_cutoff: ${...loudness_cutoff}
+    mixture_prob: ${...mixture_prob}
+    num_examples: ${...num_examples_train}
+    state_id: null
+    split_seed: 42
+  medleydb2:
+    data_dir: "/data2/yoongi/dataset/medleydb/"
+    loudness_cutoff: ${...loudness_cutoff}
+    mixture_prob: ${...mixture_prob}
+    num_examples: ${...num_examples_train}
+    state_id: null
+  mtg_jamendo:
+    data_dir: "/data2/yoongi/dataset/mtg_jamendo/"
+    loudness_cutoff: ${...loudness_cutoff}
+    # num_examples: ${...num_examples_train}
+    num_examples: 256000
+    state_id: null
+  others:
+    data_dir: "/data2/yoongi/dataset/other_tracks/"
+    loudness_cutoff: ${...loudness_cutoff}
+    # num_examples: ${...num_examples_train}
+    num_examples: 256000
+    state_id: null
+
+valid:
+  slakh2100:
+    data_dir: "/data2/yoongi/dataset/slakh2100_inst/slakh2100_flac_redux_wav/"
+    loudness_cutoff: ${...loudness_cutoff}
+    mixture_prob: ${...mixture_prob}
+    num_examples: ${...num_examples_valid}
+    state_id: 0
+    num_tracks_debug: ${...num_tracks_debug}
+  mtg_jamendo:
+    data_dir: "/data2/yoongi/dataset/mtg_jamendo/"
+    loudness_cutoff: ${...loudness_cutoff}
+    num_examples: ${...num_examples_valid}
+    state_id: 0

@@ -1,0 +1,28 @@
+## python=3.9
+## conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=11.8 -c pytorch -c nvidia
+## conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia
+
+flash-attn==2.7.0.post2
+scikit-learn
+tqdm
+einops
+packaging
+scipy
+matplotlib
+safetensors
+
+pytorch_lightning==2.1.0
+ema-pytorch==0.2.3
+hydra-core
+omegaconf
+
+soundfile
+git+https://github.com/descriptinc/audiotools
+
+
+laion-clap==1.1.4
+wandb==0.15.4
+alias-free-torch==0.0.6
+
+plotly
+librosa
