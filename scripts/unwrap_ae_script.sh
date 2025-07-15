@@ -5,7 +5,8 @@ GPU=7
 CKPT_DIR="/data2/yoongi/MGE_LDM/default_ae/checkpoints/"
 CKPT_PATH=$CKPT_DIR"last.ckpt"
 
-OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+# OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+OUTPUT_PATH=$CKPT_DIR"unwrapped_AE"
 
 CUDA_VISIBLE_DEVICES=$GPU \
 python unwrap_model.py \

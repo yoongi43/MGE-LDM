@@ -15,7 +15,8 @@ save_dir: null
 
 ## Pre-trained AutoEncoder path
 ## Should be unwrapped checkpoint
-autoencoder_ckpt_path: "/data2/yoongi/MGE_LDM/default_ae/checkpoints/unwrapped_last.ckpt"
+# autoencoder_ckpt_path: "/data2/yoongi/MGE_LDM/default_ae/checkpoints/unwrapped_last.ckpt"
+autoencoder_ckpt_path: null ## Should be specified
 
 
 batch_size: 64

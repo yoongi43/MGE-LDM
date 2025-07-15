@@ -59,9 +59,9 @@ This repository is being updated.
 - AutoEncoder checkpoint is now available.
 - Pretrained DiT checkpoint will be available soon.
 
-**AutoEncoder**: [autoencoder_checkpoint.ckpt](https://drive.google.com/file/d/1BmEUvakYYAPcQfn84Z9rioya08DzZqdp/view?usp=sharing)
+**AutoEncoder**: [unwrapped_AE.ckpt](https://drive.google.com/file/d/1BmEUvakYYAPcQfn84Z9rioya08DzZqdp/view?usp=sharing)
 
-**LDM (DiT)**: [dit_checkpoint.ckpt](#)
+**LDM (DiT)**: [unwrapped_DiT.ckpt](#)
 
 **CLAP Checkpoint**: download ```music_audioset_epoch_15_esc_90.14.pt``` from [laion_clap](https://github.com/LAION-AI/CLAP) repository.
 
@@ -105,7 +105,7 @@ GPU=0 # Set GPU ID
 CKPT_DIR="...MGE_LDM/default_ae/checkpoints/"
 CKPT_PATH=$CKPT_DIR"last.ckpt"
 
-OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+OUTPUT_PATH=$CKPT_DIR"unwrapped_AE"
 
 CUDA_VISIBLE_DEVICES=$GPU \
 python unwrap_model.py \
@@ -172,11 +172,14 @@ SAVE_DIR="/data2/yoongi/MGE_LDM"
 CONFIG_NAME="dit" # See configs/dit.yaml for details.
 CKPT_PATH="" # Optional: Path to resume training
 
+AE_CKPT_PATH=".../unwrapped_AE.ckpt" # Path to the unwrapped AutoEncoder checkpoint.
+
 CUDA_VISIBLE_DEVICES=$GPU \
 taskset -c 16-79 \
 python train_dit.py \
 --config-name $CONFIG_NAME \
-save_dir=$SAVE_DIR
+save_dir=$SAVE_DIR \
+autoencoder_ckpt_path=$AE_CKPT_PATH
 # ckpt_path=$CKPT_PATH ## Add if resuming training.
 
 
@@ -185,6 +188,7 @@ save_dir=$SAVE_DIR
 # torchrun --nproc_per_node gpu train_dit.py \
 # --config-name $CONFIG_NAME \
 # save_dir=$SAVE_DIR
+# autoencoder_ckpt_path=$AE_CKPT_PATH
 ```
 
 After training, unwrap DiT from pytorch lightning trainer by running the following script:
@@ -200,7 +204,7 @@ CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
 CKPT_PATH=$CKPT_DIR"last.ckpt"
 
-OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+OUTPUT_PATH=$CKPT_DIR"unwrapped_DiT"
 
 CUDA_VISIBLE_DEVICES=$GPU \
 python unwrap_model.py \

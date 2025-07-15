@@ -18,15 +18,12 @@ GIVEN_WAV_PATH="data_sample/bruno_24kmagic/bruno_24kmagic_seg.wav"
 # GIVEN_WAV_PATH="data_sample/charlie/charlie_wedont_seg.wav"
 
 
-# TEXT_PROMPT="Dynamic piano track"
 # TEXT_PROMPT="Jazz piano improvisation"
 TEXT_PROMPT="The sound of the distorted guitar"
 # TEXT_PROMPT="Guitar solo"
 # TEXT_PROMPT="The violin track"
 # TEXT_PROMPT="The sound of string instruments"
 # TEXT_PROMPT="Dynamic EDM synth melody"
-# TEXT_PROMPT="vocals sound"
-# TEXT_PROMPT="vocals sound (Death Growl)"
 
 ## GEN / Inpaint Condition
 NUM_STEPS=100

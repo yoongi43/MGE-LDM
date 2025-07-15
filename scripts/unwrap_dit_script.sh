@@ -8,7 +8,8 @@ CONFIG_NAME="default_dit_scratch"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
 CKPT_PATH=$CKPT_DIR"last.ckpt"
 
-OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+# OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
+OUTPUT_PATH=$CKPT_DIR"unwrapped_DiT"
 
 CUDA_VISIBLE_DEVICES=$GPU \
 python unwrap_model.py \
