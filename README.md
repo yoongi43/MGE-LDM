@@ -56,9 +56,10 @@ This repository is being updated.
 
 > **Note:** This checkpoint differs from the one used in the original paper; it was trained with additional data (MTG Jamendo, MedleyDB, etc.) and alternative hyperparameters.
 
-Pretrained checkpoint will be available soon.
+- AutoEncoder checkpoint is now available.
+- Pretrained DiT checkpoint will be available soon.
 
-**AutoEncoder**: [autoencoder_checkpoint.ckpt](#)
+**AutoEncoder**: [autoencoder_checkpoint.ckpt](https://drive.google.com/file/d/1BmEUvakYYAPcQfn84Z9rioya08DzZqdp/view?usp=sharing)
 
 **LDM (DiT)**: [dit_checkpoint.ckpt](#)
 

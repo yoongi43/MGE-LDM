@@ -13,6 +13,8 @@ seed: 42
 ckpt_path: null
 save_dir: null
 
+## Pre-trained AutoEncoder path
+## Should be unwrapped checkpoint
 autoencoder_ckpt_path: "/data2/yoongi/MGE_LDM/default_ae/checkpoints/unwrapped_last.ckpt"
 
 
