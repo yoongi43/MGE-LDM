@@ -227,7 +227,7 @@ GPU=0 # Set GPU ID
 CONFIG_NAME="dit"
 # Path to the trained LDM checkpoint. Can be downloaded from the model checkpoint section.
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_last.ckpt" 
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT.ckpt" 
 
 OUTPUT_DIR="./outputs_infer/"
 
@@ -275,7 +275,7 @@ GPU=0 # Set GPU ID
 ## Set checkpoint path
 CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_last.ckpt"
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT.ckpt"
 
 OUTPUT_DIR="./outputs_infer/"
 
@@ -324,7 +324,7 @@ GPU=0 # Set GPU ID
 ## Set checkpoint path
 CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_last.ckpt"
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT.ckpt"
 
 OUTPUT_DIR="./outputs_infer/"
 
