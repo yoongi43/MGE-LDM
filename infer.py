@@ -12,7 +12,11 @@ import warnings
 import torch
 import torchaudio
 import soundfile as sf
-
+import re
+import numpy as np
+import matplotlib.pyplot as plt
+import librosa
+import librosa.display
 warnings.filterwarnings("ignore")
 
 # from sweetdebug import sweetdebug; sweetdebug()
@@ -26,6 +30,29 @@ warnings.filterwarnings("ignore")
 #     #     os.makedirs(output_dir)
 #     # return opj(output_dir, f"output_{len(os.listdir(output_dir)) + 1}.wav")
 #     return f"output_{len(os.listdir(output_dir)) + 1}"
+
+def save_spectrogram(wav: np.ndarray, 
+                     sample_rate: int,
+                     output_path):
+    if wav.ndim > 1:
+        sig = wav.mean(axis=0)  # Average across channels if multi-channel
+    else:
+        sig = wav
+    D = librosa.stft(sig, n_fft=1024, hop_length=256, win_length=1024)
+    S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
+    
+    # plt.figure(figsize=(10, 4))
+    fig, ax = plt.subplots(figsize=(10, 4))
+    librosa.display.specshow(
+        S_db, sr=sample_rate, x_axis='time', y_axis='linear', cmap='magma', ax=ax,
+        hop_length=256,
+    )
+    plt.subplots_adjust(left=0, right=1, top=1, bottom=0, wspace=0, hspace=0)
+    plt.tight_layout()
+
+    plt.savefig(output_path, bbox_inches='tight', pad_inches=0.01)
+    plt.close()
+    
 
 
 def proc_audio(wav, downsample_ratio):
@@ -226,13 +253,23 @@ def inference(config):
         raise ValueError(f"Unknown task: {config.task}. Supported tasks are 'total_gen', 'partial_gen', 'source_extract', 'accomp_gen', 'partial_gen_iter'.")
 
 
-
+    os.makedirs(output_dir, exist_ok=True)
     ## Save the output audio files
     for bb in range(num_samples):
         ## Temporary directory to save the output.
-        os.makedirs(output_dir, exist_ok=True)
-        output_subdir = f"output_{len(os.listdir(output_dir)) + 1:04d}"
+        # os.makedirs(output_dir, exist_ok=True)
+        # output_subdir = f"output_{len(os.listdir(output_dir)) + 1:04d}"
+        # os.makedirs(opj(output_dir, output_subdir), exist_ok=True)
+        pattern = re.compile(r"^output_(\d{4})$")
+        existing = [
+            d for d in os.listdir(output_dir)
+            if os.path.isdir(opj(output_dir, d)) and pattern.match(d)
+        ]
+        numbers = sorted(int(pattern.match(d).group(1)) for d in existing)
+        next_idx = numbers[-1] + 1 if numbers else 1
+        output_subdir = f"output_{next_idx:04d}"
         os.makedirs(opj(output_dir, output_subdir), exist_ok=True)
+        
         # Save the generated audio files
         for key, tensor in output.items():
             filename = f"{key}.wav"
@@ -242,6 +279,8 @@ def inference(config):
             assert wav.shape[0] == 1, "Expected single channel audio. Multichannel audio is not implemented yet."
             sf.write(filepath, wav[0], config.model.sample_rate)
             print(f"Saved {key} to {filepath}")
+            save_spectrogram(wav[0], config.model.sample_rate, filepath.replace('.wav', '.png'))
+            
             
         if given_wav is not None:
             if config.task == "source_extract":
@@ -252,6 +291,7 @@ def inference(config):
             given_wav = to_numpy(given_wav[bb])
             sf.write(save_path, given_wav[0], config.model.sample_rate)
             print(f"Saved given wav to {save_path}")
+            save_spectrogram(given_wav[0], config.model.sample_rate, save_path.replace('.wav', '.png'))
 
     with open(opj(output_dir, output_subdir, "prompt.txt"), "w") as f:
         if config.task == "partial_gen_iter":
@@ -262,6 +302,10 @@ def inference(config):
             f.write(f"Task: {config.task}\n")
             f.write(f"Given wav: {config.given_wav_path}\n")
             f.write(f"Text prompt: {config.text_prompt}\n")
+        f.write(f"Overlap duration: {config.overlap_dur} seconds\n")
+        f.write(f"CFG scale: {config.cfg_scale}\n")
+        f.write(f"Number of diffusion steps: {config.num_steps}\n")
+        f.write(f"RePaint steps for time-axis inpainting: {config.repaint_n}\n")
 
 if __name__=="__main__":
     inference()

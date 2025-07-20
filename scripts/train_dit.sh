@@ -20,6 +20,7 @@ CONFIG_NAME="dit"
 AE_CKPT_PATH="/data2/yoongi/MGE_LDM/default_ae/checkpoints/unwrapped_last.ckpt"
 # AE_CKPT_PATH=".../unwrapped_AE.ckpt"
 
+CKPT_PATH="/data2/yoongi/MGE_LDM/dit/checkpoints/last.ckpt"
 
 # CUDA_VISIBLE_DEVICES=$GPU \
 # taskset -c 16-79 \
@@ -36,4 +37,5 @@ CUDA_VISIBLE_DEVICES=$GPU \
 torchrun --nproc_per_node gpu train_dit.py \
 --config-name $CONFIG_NAME \
 save_dir=$SAVE_DIR \
-autoencoder_ckpt_path=$AE_CKPT_PATH
+autoencoder_ckpt_path=$AE_CKPT_PATH \
+ckpt_path=$CKPT_PATH

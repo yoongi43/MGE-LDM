@@ -25,6 +25,7 @@ This repository is being updated.
 
 * **Paper**: [arXiv](https://arxiv.org/abs/2505.23305)
 * **Sample Page**: [link](https://yoongi43.github.io/MGELDM_Samples/)
+* **Real World SAmples**: [link](https://agreeable-diplodocus-5ca.notion.site/Additional-Real-World-Audio-Samples-with-MGE-LDM-23644c3c089d80cfb46bdf3aed1ffd8b?source=copy_link)
 
 ---
 
@@ -56,12 +57,9 @@ This repository is being updated.
 
 > **Note:** This checkpoint differs from the one used in the original paper; it was trained with additional data (MTG Jamendo, MedleyDB, etc.) and alternative hyperparameters.
 
-- AutoEncoder checkpoint is now available.
-- Pretrained DiT checkpoint will be available soon.
-
 **AutoEncoder**: [unwrapped_AE.ckpt](https://drive.google.com/file/d/1BmEUvakYYAPcQfn84Z9rioya08DzZqdp/view?usp=sharing)
 
-**LDM (DiT)**: [unwrapped_DiT.ckpt](#)
+**LDM (DiT)**: [unwrapped_DiT.ckpt](https://drive.google.com/file/d/1tyND8iI5Whs6_Oe-pBK2SpysGLKKa6sR/view?usp=sharing)
 
 **CLAP Checkpoint**: download ```music_audioset_epoch_15_esc_90.14.pt``` from [laion_clap](https://github.com/LAION-AI/CLAP) repository.
 
@@ -245,7 +243,7 @@ TEXT_PROMPT="Funky upbeat jazz with guitar, saxophone and piano"
 
 ## Generation Configuration
 NUM_STEPS=50
-CFG_SCALE=3.0
+CFG_SCALE=6.0
 OVERLAP_DUR=5.0 ## Overlap duration in seconds for continuation.
 REPAINT_N=4 ## Multiple repainting steps for better quality (for continuation)
 
@@ -282,12 +280,12 @@ OUTPUT_DIR="./outputs_infer/"
 ## Inference Condition
 TASK="source_extract"
 
-GIVEN_WAV_PATH="data_sample/sakanaction_music/sakanaction_music_seg.wav"
-# GIVEN_WAV_PATH="data_sample/bruno_24kmagic/bruno_24kmagic_seg.wav"
-# GIVEN_WAV_PATH="data_sample/youseebiggirl/youseebiggirl_seg.wav"
-# GIVEN_WAV_PATH="data_sample/vaundy_kaiju/vaundy_kaiju_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie/charlie_attention_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie/charlie_wedont_seg.wav"
+GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
+# GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+# GIVEN_WAV_PATH="data_sample/youseebiggirl_seg.wav"
+# GIVEN_WAV_PATH="data_sample/vaundy_kaiju_seg.wav"
+# GIVEN_WAV_PATH="data_sample/charlie_attention_seg.wav"
+# GIVEN_WAV_PATH="data_sample/charlie_wedont_seg.wav"
 
 TEXT_PROMPT="The sound of vocals"
 # TEXT_PROMPT="The sound of the bass"
@@ -297,8 +295,8 @@ TEXT_PROMPT="The sound of vocals"
 
 ## GEN / Inpaint Condition
 NUM_STEPS=200
-CFG_SCALE=1.0
-OVERLAP_DUR=4.0
+CFG_SCALE=10.0
+OVERLAP_DUR=5.0
 REPAINT_N=1 
  
 
@@ -330,10 +328,10 @@ OUTPUT_DIR="./outputs_infer/"
 
 ## Inference Condition
 TASK="partial_gen"
-GIVEN_WAV_PATH="data_sample/sakanaction_music/sakanaction_music_seg.wav"
-# GIVEN_WAV_PATH="data_sample/bruno_24kmagic/bruno_24kmagic_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie/charlie_attention_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie/charlie_wedont_seg.wav"
+GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
+# GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+# GIVEN_WAV_PATH="data_sample/charlie_attention_seg.wav"
+# GIVEN_WAV_PATH="data_sample/charlie_wedont_seg.wav"
 
 
 # TEXT_PROMPT="Jazz piano improvisation"
@@ -345,7 +343,7 @@ TEXT_PROMPT="The sound of the distorted guitar"
 
 ## GEN / Inpaint Condition
 NUM_STEPS=100
-CFG_SCALE=2.0
+CFG_SCALE=6.0
 OVERLAP_DUR=5.0
 REPAINT_N=1
 

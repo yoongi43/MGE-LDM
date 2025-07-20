@@ -1,34 +1,34 @@
 #!/bin/bash
 
-GPU=4
+GPU=2
 # CONFIG_NAME="default_dit"
-CONFIG_NAME="default_dit_scratch"
+CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_last.ckpt"
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT_31.ckpt"
 
 OUTPUT_DIR="./outputs_infer/"
 
 ## Inference Condition
 TASK="partial_gen"
-# GEN_AUDIO_DUR=30.0
-# GIVEN_WAV_PATH="/home/yoongi43/gen_extract/MGE-LDM/data_sample/sample1/mixture.wav"
-# GIVEN_WAV_PATH="data_sample/sakanaction_music/sakanaction_music_seg.wav"
-GIVEN_WAV_PATH="data_sample/bruno_24kmagic/bruno_24kmagic_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie/charlie_attention_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie/charlie_wedont_seg.wav"
+GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
+# GIVEN_WAV_PATH="data_sample/haruharu_seg.wav"
+# GIVEN_WAV_PATH="data_sample/dontwannacry_seg.wav"
+# GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+# GIVEN_WAV_PATH="data_sample/iu_lilac_seg.wav"
+# GIVEN_WAV_PATH="data_sample/charlie_attention_seg.wav"
+# GIVEN_WAV_PATH="data_sample/charlie_wedont_seg.wav"
+# GIVEN_WAV_PATH="data_sample/aot_seg.wav"
 
-
-# TEXT_PROMPT="Jazz piano improvisation"
-TEXT_PROMPT="The sound of the distorted guitar"
-# TEXT_PROMPT="Guitar solo"
-# TEXT_PROMPT="The violin track"
-# TEXT_PROMPT="The sound of string instruments"
-# TEXT_PROMPT="Dynamic EDM synth melody"
+# TEXT_PROMPT="The sound of overdrive guitar"
+TEXT_PROMPT="Funky guitar strumming"
+# TEXT_PROMPT="Jazzy guitar improvisation"
 
 ## GEN / Inpaint Condition
 NUM_STEPS=100
-CFG_SCALE=2.0
-OVERLAP_DUR=5.0
+# CFG_SCALE=8.0
+# CFG_SCALE=14.0
+CFG_SCALE=5.0
+OVERLAP_DUR=6.0
 REPAINT_N=1
  
 
