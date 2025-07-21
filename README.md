@@ -55,11 +55,14 @@ This repository is being updated.
 
 ## 💾 Model Checkpoints
 
-> **Note:** This checkpoint differs from the one used in the original paper; it was trained with additional data (MTG Jamendo, MedleyDB, etc.) and alternative hyperparameters.
+> **Note:** This checkpoint is distinct from the one used in the original paper; it was trained with additional data (MTG Jamendo, MedleyDB, etc.) and uses alternative hyperparameters.
 
 **AutoEncoder**: [unwrapped_AE.ckpt](https://drive.google.com/file/d/1BmEUvakYYAPcQfn84Z9rioya08DzZqdp/view?usp=sharing)
 
 **LDM (DiT)**: [unwrapped_DiT.ckpt](https://drive.google.com/file/d/1tyND8iI5Whs6_Oe-pBK2SpysGLKKa6sR/view?usp=sharing)
+
+(Note: The DiT checkpoint includes both the diffusion model and autoencoder weights.
+You do not need to download the autoencoder checkpoint separately for inference--only the DiT checkpoint is required.)
 
 **CLAP Checkpoint**: download ```music_audioset_epoch_15_esc_90.14.pt``` from [laion_clap](https://github.com/LAION-AI/CLAP) repository.
 
