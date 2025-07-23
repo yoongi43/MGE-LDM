@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPU=2
+GPU=4
 # CONFIG_NAME="default_dit_mix_pretrain"
 # CONFIG_NAME="default_dit"
 # CONFIG_NAME="default_dit_scratch"
@@ -11,7 +11,8 @@ CKPT_PATH=$CKPT_DIR"last.ckpt"
 
 # OUTPUT_PATH=$CKPT_DIR"unwrapped_last"
 # OUTPUT_PATH=$CKPT_DIR"unwrapped_DiT"
-OUTPUT_PATH=$CKPT_DIR"unwrapped_DiT_31"
+# OUTPUT_PATH=$CKPT_DIR"unwrapped_DiT_31"
+OUTPUT_PATH=$CKPT_DIR"unwrapped_DiT_35"
 
 CUDA_VISIBLE_DEVICES=$GPU \
 python unwrap_model.py \

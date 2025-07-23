@@ -4,7 +4,7 @@ GPU=2
 # CONFIG_NAME="default_dit"
 CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_DiT_31.ckpt"
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT_31.ckpt" ## Set your checkpoint path here
 
 OUTPUT_DIR="./outputs_infer/"
 
@@ -20,8 +20,8 @@ GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
 # GIVEN_WAV_PATH="data_sample/aot_seg.wav"
 
 # TEXT_PROMPT="The sound of overdrive guitar"
-TEXT_PROMPT="Funky guitar strumming"
-# TEXT_PROMPT="Jazzy guitar improvisation"
+# TEXT_PROMPT="Funky guitar strumming"
+TEXT_PROMPT="Jazzy guitar improvisation"
 
 ## GEN / Inpaint Condition
 NUM_STEPS=100

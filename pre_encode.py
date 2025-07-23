@@ -17,13 +17,14 @@ from data.pre_encode_latents_utils import (
 )
 
 BASEDIR="/data2/yoongi/dataset/"
+## Set directories for datasets
 DATA_DIRS = {
     "slakh2100": opj(BASEDIR, "slakh2100_inst/slakh2100_flac_redux_wav/"),
     "musdb18hq": opj(BASEDIR, "musdb18hq_from_zenodo/"),
     "moisesdb": opj(BASEDIR, "moisesdb/moisesdb_v0.1/"),
-    "medleydbV2": opj(BASEDIR, "medleydb/"),
-    "mtgjamendo": opj(BASEDIR, "mtg_jamendo/"),
-    "other_tracks": opj(BASEDIR, "other_tracks/"),
+    # "medleydbV2": opj(BASEDIR, "medleydb/"),
+    # "mtgjamendo": opj(BASEDIR, "mtg_jamendo/"),
+    # "other_tracks": opj(BASEDIR, "other_tracks/"),
 }
 
 @hydra.main(version_base=None, config_path="configs", config_name="default_ae")

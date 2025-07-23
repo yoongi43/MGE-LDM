@@ -6,7 +6,7 @@ GPU=1
 # CONFIG_NAME="default_dit_scratch"
 CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_DiT_31.ckpt"
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT_31.ckpt" ## Set your checkpoint path here
 
 OUTPUT_DIR="./outputs_infer/"
 

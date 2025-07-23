@@ -12,9 +12,10 @@ This repository is being updated.
 
 <!-- 1. [✨ Features](#✨-features) -->
 1. [📖 Paper & Samples](#📖-paper--samples)
-2. [⚙️ Installation](#⚙️-installation)
-3. [💾 Model Checkpoints](#💾-model-checkpoints)
-4. [🛠️ Process Overview](#🛠️-process-overview)
+2. [✨ Features](#✨-features)
+3. [⚙️ Installation](#⚙️-installation)
+4. [💾 Model Checkpoints](#💾-model-checkpoints)
+5. [🛠️ Process Overview](#🛠️-process-overview)
 6. [🚀 Inference](#🚀-inference)
 7. [🔗 Reference](#🔗-reference)
 8. [📚 Citation](#📚-citation)
@@ -25,9 +26,35 @@ This repository is being updated.
 
 * **Paper**: [arXiv](https://arxiv.org/abs/2505.23305)
 * **Sample Page**: [link](https://yoongi43.github.io/MGELDM_Samples/)
-* **Real World SAmples**: [link](https://agreeable-diplodocus-5ca.notion.site/Additional-Real-World-Audio-Samples-with-MGE-LDM-23644c3c089d80cfb46bdf3aed1ffd8b?source=copy_link)
+* **Real World Samples**: [link](https://agreeable-diplodocus-5ca.notion.site/Additional-Real-World-Audio-Samples-with-MGE-LDM-23644c3c089d80cfb46bdf3aed1ffd8b?source=copy_link)
 
 ---
+## ✨ Features
+<div style="display: flex; gap: 1rem; align-items: flex-start;">
+  <div style="width:55%; margin: 0;">
+    <img src="figs/training_mgeldm.png" alt="Training Overview" style="width: 100%;" />
+    <p style="text-align: center; margin-top: 0.5rem;">
+      Training Overview<br>
+    </p>
+  </div>
+  <div style="width:41%; margin: 0;">
+    <img src="figs/inference_mgeldm.png" alt="Inference Workflow" style="width: 100%;" />
+    <p style="text-align: center; margin-top: 0.5rem;">
+        Inference Workflow<br>
+    </p>
+  </div>
+</div>
+
+MGE‑LDM can simultaneously generate music and extract sources—see the paper and the Inference section below for details.
+
+- **Total Generation**  
+  Generate a complete music track from a text prompt.
+- **Source Extraction**  
+  Extract desired individual sources (e.g., vocals, bass, drums) from a mixed audio using a text query.
+- **Partial Generation**  
+  Impute and add missing sources to an existing mix based on a textual description.
+---
+
 
 ## ⚙️ Installation
 
@@ -238,16 +265,13 @@ GEN_AUDIO_DUR=30.0 # Set the duration of the generated audio in seconds.
 GIVEN_WAV_PATH=null
 
 ## Set text prompt here
-TEXT_PROMPT="Funky upbeat jazz with guitar, saxophone and piano"
-# TEXT_PROMPT="Lo-fi hip hop beat with mellow jazzy chords and a smooth bassline"
-# TEXT_PROMPT="Relaxing acoustic guitar instrumental with soft percussion"
-# TEXT_PROMPT="Metal guitar riff with heavy distortion and fast-paced drums"
+TEXT_PROMPT="Lo-fi hip hop beat with mellow jazzy chords and a smooth bassline"
 # TEXT_PROMPT="Upbeat electronic dance music with catchy synth melodies and driving bass"
 
 ## Generation Configuration
 NUM_STEPS=50
 CFG_SCALE=6.0
-OVERLAP_DUR=5.0 ## Overlap duration in seconds for continuation.
+OVERLAP_DUR=5.0 ## Overlap duration in seconds for continuation. (MGE-LDM processes audio in chunks)
 REPAINT_N=4 ## Multiple repainting steps for better quality (for continuation)
 
 
@@ -283,17 +307,12 @@ OUTPUT_DIR="./outputs_infer/"
 ## Inference Condition
 TASK="source_extract"
 
-GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
-# GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
-# GIVEN_WAV_PATH="data_sample/youseebiggirl_seg.wav"
-# GIVEN_WAV_PATH="data_sample/vaundy_kaiju_seg.wav"
+GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+# GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
 # GIVEN_WAV_PATH="data_sample/charlie_attention_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie_wedont_seg.wav"
 
 TEXT_PROMPT="The sound of vocals"
-# TEXT_PROMPT="The sound of the bass"
 # TEXT_PROMPT="The sound of drums"
-# TEXT_PROMPT="The sound of guitars"
 # TEXT_PROMPT="The sound of the synthesizer"
 
 ## GEN / Inpaint Condition
@@ -331,18 +350,15 @@ OUTPUT_DIR="./outputs_infer/"
 
 ## Inference Condition
 TASK="partial_gen"
-GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
-# GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+# GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
 # GIVEN_WAV_PATH="data_sample/charlie_attention_seg.wav"
-# GIVEN_WAV_PATH="data_sample/charlie_wedont_seg.wav"
 
 
-# TEXT_PROMPT="Jazz piano improvisation"
 TEXT_PROMPT="The sound of the distorted guitar"
+# TEXT_PROMPT="Jazz piano improvisation"
 # TEXT_PROMPT="Guitar solo"
-# TEXT_PROMPT="The violin track"
-# TEXT_PROMPT="The sound of string instruments"
-# TEXT_PROMPT="Dynamic EDM synth melody"
+# TEXT_PROMPT="The sound of strings section"
 
 ## GEN / Inpaint Condition
 NUM_STEPS=100
@@ -368,9 +384,9 @@ python infer.py \
 
 
 ## 🔗 Reference
-
-* **Stable Audio Tools**: [stable-audio-tools](https://github.com/yourusername/stable-audio-tools)
-* **Friendly Stable Audio Tools**: [friendly-stable-audio-tools](https://github.com/yourusername/friendly-stable-audio-tools)
+The codes are build upon the following repositories:
+* **Stable Audio Tools** by Stability-AI: [stable-audio-tools](https://github.com/Stability-AI/stable-audio-tools)
+* **Friendly Stable Audio Tools** by Yukara Ikemiya: [friendly-stable-audio-tools](https://github.com/yukara-ikemiya/friendly-stable-audio-tools)
 
 ---
 
