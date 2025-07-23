@@ -51,7 +51,7 @@ This repository is being updated.
   <img src="figs/inference_mgeldm.png" alt="Inference Workflow" width="41.4%" />
 </div>
 
-MGE‑LDM can simultaneously generate music and extract sources - refer to the paper and the [🚀 Inference](#🚀-inference) section below for details.
+MGE‑LDM can simultaneously generate music and extract sources - refer to the paper and the [🚀 Inference](#inference) section below for details.
 
 - **Total Generation**  
   Generate a complete music track from a text prompt.
