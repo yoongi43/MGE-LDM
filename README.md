@@ -396,7 +396,7 @@ The codes are build upon the following repositories:
 
 ---
 
-## 📚 Citation
+## 📚 Citation <a id="citation"></a>
 
 ```bibtex
 @article{chae2025mge,
