@@ -11,25 +11,25 @@ This repository is being updated.
 ## 📋 Table of Contents
 
 <!-- 1. [✨ Features](#✨-features) -->
-1. [📖 Paper & Samples](#📖-paper--samples)
-2. [✨ Features](#✨-features)
-3. [⚙️ Installation](#⚙️-installation)
-4. [💾 Model Checkpoints](#💾-model-checkpoints)
-5. [🛠️ Process Overview](#🛠️-process-overview)
-6. [🚀 Inference](#🚀-inference)
-7. [🔗 Reference](#🔗-reference)
+1. [📖 Paper & Samples](#paper--samples)
+2. [✨ Features](#features)
+3. [⚙️ Installation](#installation)
+4. [💾 Model Checkpoints](#model-checkpoints)
+5. [🛠️ Process Overview](#process-overview)
+6. [🚀 Inference](#inference)
+7. [🔗 Reference](#reference)
 8. [📚 Citation](#citation)
 
 ---
 
-## 📖 Paper & Samples
+## 📖 Paper & Samples <a id="paper--samples"></a>
 
 * **Paper**: [arXiv](https://arxiv.org/abs/2505.23305)
 * **Sample Page**: [link](https://yoongi43.github.io/MGELDM_Samples/)
 * **Real World Samples**: [link](https://agreeable-diplodocus-5ca.notion.site/Additional-Real-World-Audio-Samples-with-MGE-LDM-23644c3c089d80cfb46bdf3aed1ffd8b?source=copy_link)
 
 ---
-## ✨ Features
+## ✨ Features <a id="features"></a>
 <!-- <div style="display: flex; gap: 1rem; align-items: flex-start;">
   <div style="width:55%; margin: 0;">
     <img src="figs/training_mgeldm.png" alt="Training Overview" style="width: 100%;" />
@@ -62,7 +62,7 @@ MGE‑LDM can simultaneously generate music and extract sources - refer to the p
 ---
 
 
-## ⚙️ Installation
+## ⚙️ Installation <a id="installation"></a>
 
 1. **Clone the repo**:
 
@@ -86,7 +86,7 @@ MGE‑LDM can simultaneously generate music and extract sources - refer to the p
    ```
 ---
 
-## 💾 Model Checkpoints
+## 💾 Model Checkpoints <a id="model-checkpoints"></a>
 
 > **Note:** This checkpoint is distinct from the one used in the original paper; it was trained with additional data (MTG Jamendo, MedleyDB, etc.) and uses alternative hyperparameters.
 
@@ -101,7 +101,7 @@ You do not need to download the autoencoder checkpoint separately for inference-
 
 ---
 
-## 🛠️ Process Overview
+## 🛠️ Process Overview <a id="process-overview"></a>
 
 ### 1. Download datasets
 - [Slakh2100](https://zenodo.org/records/4599666)
@@ -250,7 +250,7 @@ python unwrap_model.py \
 ```
 
 
-## 🚀 Inference
+## 🚀 Inference <a id="inference"></a>
 ### Total Generation
 Run ```bash scripts/infer_total_gen.sh```
 ```bash
@@ -389,7 +389,7 @@ python infer.py \
 
 
 
-## 🔗 Reference
+## 🔗 Reference <a id="reference"></a>
 The codes are build upon the following repositories:
 * **Stable Audio Tools** by Stability-AI: [stable-audio-tools](https://github.com/Stability-AI/stable-audio-tools)
 * **Friendly Stable Audio Tools** by Yukara Ikemiya: [friendly-stable-audio-tools](https://github.com/yukara-ikemiya/friendly-stable-audio-tools)
