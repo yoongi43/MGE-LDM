@@ -1,24 +1,26 @@
 #!/bin/bash
 
-GPU=4
+GPU=5
 # CONFIG_NAME="default_dit"
-CONFIG_NAME="default_dit_scratch"
+CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
-CKPT_PATH=$CKPT_DIR"unwrapped_last.ckpt"
+# CKPT_PATH=$CKPT_DIR"unwrapped_last.ckpt"
+CKPT_PATH=$CKPT_DIR"unwrapped_DiT_35.ckpt" ## Set your checkpoint path here
+
 
 OUTPUT_DIR="./outputs_infer/"
 
 ## Inference Condition
 TASK="accomp_gen"
 # GEN_AUDIO_DUR=30.0
-GIVEN_WAV_PATH="/home/yoongi43/gen_extract/MGE-LDM/data_sample/musdb_AlJames/vocals.wav"
+GIVEN_WAV_PATH="data_sample/musdb_AlJames/vocals.wav"
 # TEXT_PROMPT="The piano accompaniment without vocals"
 TEXT_PROMPT="Accompaniment containing piano, drums, and bass, and without vocals"
 
 ## GEN / Inpaint Condition
-NUM_STEPS=20
-CFG_SCALE=2.0
-OVERLAP_DUR=3.0
+NUM_STEPS=100
+CFG_SCALE=4.0
+OVERLAP_DUR=5.0
 REPAINT_N=2
  
 

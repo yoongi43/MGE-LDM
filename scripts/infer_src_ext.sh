@@ -6,18 +6,20 @@ GPU=2
 CONFIG_NAME="dit"
 CKPT_DIR="/data2/yoongi/MGE_LDM/${CONFIG_NAME}/checkpoints/"
 CKPT_PATH=$CKPT_DIR"unwrapped_DiT_31.ckpt" ## Set your checkpoint path here
+# CKPT_PATH=$CKPT_DIR"unwrapped_DiT_35.ckpt" ## Set your checkpoint path here
 
 OUTPUT_DIR="./outputs_infer/"
 
 ## Inference Condition
 TASK="source_extract"
 
-GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
-# GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
+# GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
+GIVEN_WAV_PATH="data_sample/bruno_24kmagic_seg.wav"
 # GIVEN_WAV_PATH="data_sample/passo_bem_solto_seg.wav"
 # GIVEN_WAV_PATH="data_sample/charlie_attention_seg.wav"
 # GIVEN_WAV_PATH="data_sample/charlie_wedont_seg.wav"
 # GIVEN_WAV_PATH="data_sample/haruharu_seg.wav"
+# GIVEN_WAV_PATH="data_sample/spitz_robinson_seg.wav"
 # GIVEN_WAV_PATH="data_sample/nell_103_seg.wav"
 # GIVEN_WAV_PATH="data_sample/iu_lilac_seg.wav"
 # GIVEN_WAV_PATH="data_sample/dontwannacry_seg.wav"
@@ -27,15 +29,17 @@ GIVEN_WAV_PATH="data_sample/sakanaction_music_seg.wav"
 # GIVEN_WAV_PATH="data_sample/born_hater_seg.wav"
 
 
-# TEXT_PROMPT="The sound of vocals"
-# TEXT_PROMPT="The sound of synthesizer"
-TEXT_PROMPT="Synthesizer audio"
+TEXT_PROMPT="The sound of vocals"
+# TEXT_PROMPT="Synth audio"
+# TEXT_PROMPT="Piano solo audio"
+# TEXT_PROMPT="Clean guitar audio"
 # TEXT_PROMPT="The sound of drums"
 # TEXT_PROMPT="The sound of drum beat"
 # TEXT_PROMPT="The sound of bass"
 # TEXT_PROMPT="The sound of bass guitar"
 # TEXT_PROMPT="The sound of distorted guitar"
 # TEXT_PROMPT="The sound of overdrive guitar"
+# TEXT_PROMPT="Overdrive guitar audio"
 # TEXT_PROMPT="The sound of acoustic guitar"
 
 ## GEN / Inpaint Condition

@@ -18,7 +18,7 @@ This repository is being updated.
 5. [🛠️ Process Overview](#🛠️-process-overview)
 6. [🚀 Inference](#🚀-inference)
 7. [🔗 Reference](#🔗-reference)
-8. [📚 Citation](#📚-citation)
+8. [📚 Citation](#📚citation)
 
 ---
 
