@@ -30,7 +30,7 @@ This repository is being updated.
 
 ---
 ## ✨ Features
-<div style="display: flex; gap: 1rem; align-items: flex-start;">
+<!-- <div style="display: flex; gap: 1rem; align-items: flex-start;">
   <div style="width:55%; margin: 0;">
     <img src="figs/training_mgeldm.png" alt="Training Overview" style="width: 100%;" />
     <p style="text-align: center; margin-top: 0.5rem;">
@@ -43,9 +43,15 @@ This repository is being updated.
         Inference Workflow<br>
     </p>
   </div>
+</div> -->
+
+**Training / Inference Overview**
+<div style="display: flex; gap: 1rem; align-items: center;">
+  <img src="figs/training_mgeldm.png" alt="Training Overview" width="56%" />
+  <img src="figs/inference_mgeldm.png" alt="Inference Workflow" width="41.4%" />
 </div>
 
-MGE‑LDM can simultaneously generate music and extract sources—see the paper and the Inference section below for details.
+MGE‑LDM can simultaneously generate music and extract sources - refer to the paper and the [🚀 Inference](#🚀-inference) section below for details.
 
 - **Total Generation**  
   Generate a complete music track from a text prompt.
