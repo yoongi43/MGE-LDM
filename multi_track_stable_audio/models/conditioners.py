@@ -219,9 +219,9 @@ class CLAPAudioConditioner(Conditioner):
         # Convert to mono
         mono_audios = audios.mean(dim=1) # (B, L)
 
-        with torch.cuda.amp.autocast(enabled=False):
-            audio_embedding = self.model.get_audio_embedding_from_data(mono_audios.float(), use_tensor=True)
-            # -> (B, 512)
+        # with torch.cuda.amp.autocast(enabled=False):
+        audio_embedding = self.model.get_audio_embedding_from_data(mono_audios.float(), use_tensor=True)
+        # -> (B, 512)
 
         audio_embedding = audio_embedding.unsqueeze(1) # (B, 1, 512)
 

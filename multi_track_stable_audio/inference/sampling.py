@@ -38,9 +38,9 @@ def sample_simple(model, x, steps, eta, t_min=None, verbose: bool = True,  **ext
     for i in range(steps):
 
         # Get the model output (v, the predicted velocity)
-        with torch.cuda.amp.autocast():
-            ## t[i]: 현재 timestep에 대한 t값, ts * t[i]: 현재 timestep에 대한 t값을 배치 크기만큼 확장한 텐서
-            v = model(x, ts * t[i], **extra_args).float()
+        # with torch.cuda.amp.autocast():
+        ## t[i]: 현재 timestep에 대한 t값, ts * t[i]: 현재 timestep에 대한 t값을 배치 크기만큼 확장한 텐서
+        v = model(x, ts * t[i], **extra_args).float()
 
         # Predict the noise and the denoised image
         pred = x * alphas[i] - v * sigmas[i]
@@ -111,15 +111,14 @@ def sample_extraction_simple(model, x, steps, eta, verbose:bool = True, t_min=No
     for i in range(steps):
         
         # Get the model output (v, the predicted velocity)
-        with torch.cuda.amp.autocast():
-            # cur_ts: (B, 3)
-            # x: (B, 3C, T)
-            # v: (B, 3C, T)
-            # 이 cur_ts를 제외하고 나머지는 거의 같음. dummy 처리 빼고.
-            cur_ts = torch.ones(bs, 3).to(x.device) * t[i]
-            cur_ts[:, 0] = 0.0
+        # with torch.cuda.amp.autocast():
+        # cur_ts: (B, 3)
+        # x: (B, 3C, T)
+        # v: (B, 3C, T)
+        cur_ts = torch.ones(bs, 3).to(x.device) * t[i]
+        cur_ts[:, 0] = 0.0
 
-            v = model(x, cur_ts, **extra_args).float()
+        v = model(x, cur_ts, **extra_args).float()
 
         # Predict the noise and the denoised image
         pred = x * alphas[i] - v * sigmas[i] ## first C channels are dummy.
@@ -187,9 +186,9 @@ def sample(
     
     for i in range(steps):
         for jj in range(repaint_n):
-            with torch.cuda.amp.autocast():
-                # v = model(x, ts * t[i], **extra_args).float()
-                v = model.model_dit(x, ts * t[i], **extra_args).float()
+            # with torch.cuda.amp.autocast():
+            # v = model(x, ts * t[i], **extra_args).float()
+            v = model.model_dit(x, ts * t[i], **extra_args).float()
             pred = x * alphas[i] - v * sigmas[i]
             eps = x * sigmas[i] + v * alphas[i]
             
@@ -289,12 +288,12 @@ def sample_given_track(
                 x[:, tidx1:tidx2, :t_over] = overlap_z[:, tidx1:tidx2, :]
                 x[:, tidx1:tidx2, t_over:] = given_z
             # x[:, given_track_idx*latent_dim:(given_track_idx+1)*latent_dim, :] = given_z
-            with torch.cuda.amp.autocast():
-                ## cur_ts: (B, 3)
-                ## x: (B, 3C, T)
-                ## v: (B, 3C, T)
-                # v = model(x, cur_ts, **extra_args).float()
-                v = model.model_dit(x, cur_ts, **extra_args).float()
+            # with torch.cuda.amp.autocast():
+            ## cur_ts: (B, 3)
+            ## x: (B, 3C, T)
+            ## v: (B, 3C, T)
+            # v = model(x, cur_ts, **extra_args).float()
+            v = model.model_dit(x, cur_ts, **extra_args).float()
             
             pred = x * alphas[ii] - v * sigmas[ii] ## ex) If given track idx=1, then C:2C is the dummy region.
             eps = x * sigmas[ii] + v * alphas[ii]

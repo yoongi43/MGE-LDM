@@ -89,8 +89,8 @@ class InferenceTaskWrapper:
         if branch == "text":
             for bb in range(num_cond):
                 if conditions[bb] is not None:
-                    with torch.cuda.amp.autocast():
-                        cond_inputs, mask_txt = self.text_conditioner([conditions[bb]])
+                    # with torch.cuda.amp.autocast():
+                    cond_inputs, mask_txt = self.text_conditioner([conditions[bb]])
                     conditioning_list.append(cond_inputs.float())
                 else:
                     conditioning_list.append(torch.zeros((1, 1, 512), device=self.device, dtype=torch.float32))
