@@ -158,15 +158,15 @@ class MGELDM_TrainingWrapper(pl.LightningModule):
         
         loss_info = {}
         
-        with torch.cuda.amp.autocast():
-            self.diffusion.conditioner.set_device(self.device)
-            conditioning = self.diffusion.conditioner(batch)
-            """
-            conditioning:
-            {
-                "audio_cond": [(B, 1, 512), (B, 1, 512), (B, 1, 512)],
-                "prompt_cond": [None, (B, 512), (B, 512)],
-            }
+        # with torch.cuda.amp.autocast():
+        self.diffusion.conditioner.set_device(self.device)
+        conditioning = self.diffusion.conditioner(batch)
+        """
+        conditioning:
+        {
+            "audio_cond": [(B, 1, 512), (B, 1, 512), (B, 1, 512)],
+            "prompt_cond": [None, (B, 512), (B, 512)],
+        }
             """
         
         diffusion_input = torch.cat([z_mix, z_submix, z_src], dim=1) # (B, 3C, T)
@@ -222,44 +222,44 @@ class MGELDM_TrainingWrapper(pl.LightningModule):
         elif self.diffusion_objective == "rectified_flow":
             targets = noise - diffusion_input
         
-        with torch.cuda.amp.autocast():
-            output = self.diffusion(
-                noised_inputs,
-                t_,
-                cond=conditioning,
-                cfg_dropout_prob=self.cfg_dropout_prob,
-            )
+        # with torch.cuda.amp.autocast():
+        output = self.diffusion(
+            noised_inputs,
+            t_,
+            cond=conditioning,
+            cfg_dropout_prob=self.cfg_dropout_prob,
+        )
+        
+        loss_info.update({
+            "output": output, ## (B, 3C, T)
+            "targets": targets,
+            "timestep_mask": tmask_expand, ## if 0, the loss is not calculated for the track
+        })
+        
+        loss, losses = self.losses(loss_info)
+        
+        if self.log_loss_info:
+            num_loss_buckets = 10
+            bucket_size = 1 / num_loss_buckets
+            loss_all = F.mse_loss(output, targets, reduction="none") # loss_all: (B, 3C, T)
             
-            loss_info.update({
-                "output": output, ## (B, 3C, T)
-                "targets": targets,
-                "timestep_mask": tmask_expand, ## if 0, the loss is not calculated for the track
-            })
+            sigmas = rearrange(self.all_gather(sigmas), "w b c n -> (w b) c n").squeeze()
+            # w: world size, b: batch size, c: channels, n: seq_len
             
-            loss, losses = self.losses(loss_info)
+            # gather loss_all across all gpus
+            loss_all = rearrange(self.all_gather(loss_all), "w b c n -> (w b) c n")
             
-            if self.log_loss_info:
-                num_loss_buckets = 10
-                bucket_size = 1 / num_loss_buckets
-                loss_all = F.mse_loss(output, targets, reduction="none") # loss_all: (B, 3C, T)
-                
-                sigmas = rearrange(self.all_gather(sigmas), "w b c n -> (w b) c n").squeeze()
-                # w: world size, b: batch size, c: channels, n: seq_len
-                
-                # gather loss_all across all gpus
-                loss_all = rearrange(self.all_gather(loss_all), "w b c n -> (w b) c n")
-                
-                ## Bucket loss values based on corresponding sigma values, bucketing sigma values by bucket_size
-                loss_all = torch.stack([loss_all[(sigmas >= i) & (sigmas < i + bucket_size)].mean()
-                                       for i in torch.arange(0, 1, bucket_size).to(self.device)])
+            ## Bucket loss values based on corresponding sigma values, bucketing sigma values by bucket_size
+            loss_all = torch.stack([loss_all[(sigmas >= i) & (sigmas < i + bucket_size)].mean()
+                                    for i in torch.arange(0, 1, bucket_size).to(self.device)])
 
-                # Log bucketed losses with corresponding sigma bucket values, if it's not NaN
-                debug_log_dict = {
-                    f"model/loss_all_{i / num_loss_buckets:.1f}":
-                    loss_all[i].detach() for i in range(num_loss_buckets) if not torch.isnan(loss_all[i])
-                }
+            # Log bucketed losses with corresponding sigma bucket values, if it's not NaN
+            debug_log_dict = {
+                f"model/loss_all_{i / num_loss_buckets:.1f}":
+                loss_all[i].detach() for i in range(num_loss_buckets) if not torch.isnan(loss_all[i])
+            }
 
-                self.log_dict(debug_log_dict)
+            self.log_dict(debug_log_dict)
                 
         log_dict = {
             'train/loss': loss.detach(),
@@ -389,8 +389,8 @@ class MGELDM_DemoCallback(pl.Callback):
         
         try:
             # Generation demo
-            with torch.cuda.amp.autocast():
-                conditioning = module.diffusion.conditioner(demo_cond) ## Forward of multiconditioner_batch
+            # with torch.cuda.amp.autocast():
+            conditioning = module.diffusion.conditioner(demo_cond) ## Forward of multiconditioner_batch
 
             # cond_inputs = module.diffusion.get_conditioning_inputs(conditioning, 
             #                                                        specify_global_key=specify_global_key)
@@ -406,40 +406,40 @@ class MGELDM_DemoCallback(pl.Callback):
 
                 print(f"[ CFG scale: {cfg_scale} ] Mixture Generation")
 
-                with torch.cuda.amp.autocast():
-                    model = module.diffusion_ema.model if module.diffusion_ema else module.diffusion
+                # with torch.cuda.amp.autocast():
+                model = module.diffusion_ema.model if module.diffusion_ema else module.diffusion
 
-                    # Sample
-                    ## nosie: (B, C3, T)
-                    # global_embed = torch.zeros_like(cond_inputs["global_embed"]) # (B, 3, 512)
-                    cond_inputs = module.diffusion.get_conditioning_inputs(
-                        conditioning,
-                        specify_global_key=specify_global_key,
-                        mask_tracks=[0, 1] ## For unconditional generation
-                    )
-                    if module.diffusion_objective == "v":
-                        fakes = sample(model, noise, self.demo_steps, 0,
-                                        verbose=True, t_min=self.t_min,
-                                        **cond_inputs, cfg_scale=cfg_scale, 
-                                        # batch_cfg=True
-                                        )
-                        # fakes: (B, C3, T)
-                    elif module.diffusion_objective == "rectified_flow":
-                        raise NotImplementedError("t_min should be implemented for rectified_flow")
-                        fakes = sample_discrete_euler(model, noise, self.demo_steps, verbose=True, **cond_inputs, cfg_scale=cfg_scale, batch_cfg=True)
+                # Sample
+                ## nosie: (B, C3, T)
+                # global_embed = torch.zeros_like(cond_inputs["global_embed"]) # (B, 3, 512)
+                cond_inputs = module.diffusion.get_conditioning_inputs(
+                    conditioning,
+                    specify_global_key=specify_global_key,
+                    mask_tracks=[0, 1] ## For unconditional generation
+                )
+                if module.diffusion_objective == "v":
+                    fakes = sample(model, noise, self.demo_steps, 0,
+                                    verbose=True, t_min=self.t_min,
+                                    **cond_inputs, cfg_scale=cfg_scale, 
+                                    # batch_cfg=True
+                                    )
+                    # fakes: (B, C3, T)
+                elif module.diffusion_objective == "rectified_flow":
+                    raise NotImplementedError("t_min should be implemented for rectified_flow")
+                    fakes = sample_discrete_euler(model, noise, self.demo_steps, verbose=True, **cond_inputs, cfg_scale=cfg_scale, batch_cfg=True)
 
-                    # Decode
-                    if module.diffusion.pretransform:
-                        # fake_mix, fake_submix, fake_src = fakes.chunk(3, dim=1)
-                        fake_mix_z, fake_submix_z, fake_src_z = fakes.chunk(3, dim=1) # latents
-                        fake_tracks_z = torch.cat([fake_mix_z, fake_submix_z, fake_src_z], dim=0) # (3B, C, T)
-                        fakes_tracks = module.diffusion.pretransform.decode(fake_tracks_z)
-                        # fakes_tracks: (3B, 1, T)
-                        bs = fake_mix_z.shape[0]
-                        fake_mix, fake_submix, fake_src = torch.chunk(fakes_tracks, 3, dim=0) 
-                        # each, (B, 1, T)
-                    else:
-                        raise NotImplementedError
+                # Decode
+                if module.diffusion.pretransform:
+                    # fake_mix, fake_submix, fake_src = fakes.chunk(3, dim=1)
+                    fake_mix_z, fake_submix_z, fake_src_z = fakes.chunk(3, dim=1) # latents
+                    fake_tracks_z = torch.cat([fake_mix_z, fake_submix_z, fake_src_z], dim=0) # (3B, C, T)
+                    fakes_tracks = module.diffusion.pretransform.decode(fake_tracks_z)
+                    # fakes_tracks: (3B, 1, T)
+                    bs = fake_mix_z.shape[0]
+                    fake_mix, fake_submix, fake_src = torch.chunk(fakes_tracks, 3, dim=0) 
+                    # each, (B, 1, T)
+                else:
+                    raise NotImplementedError
 
                 sample_dir = os.path.join(trainer.default_root_dir, 'samples', f'{trainer.global_step:08}', 'total_gen', f'cfg_{cfg_scale}')
                 os.makedirs(sample_dir, exist_ok=True)
@@ -510,37 +510,37 @@ class MGELDM_DemoCallback(pl.Callback):
                 noise_mix0[:, :latent_dim] = mix_z[:self.num_demos]
 
 
-                with torch.cuda.amp.autocast():
-                    model = module.diffusion_ema.model if module.diffusion_ema else module.diffusion
+                # with torch.cuda.amp.autocast():
+                model = module.diffusion_ema.model if module.diffusion_ema else module.diffusion
 
-                    if module.diffusion_objective == "v":
-                        fakes = sample_extraction(
-                            model, noise_mix0, self.demo_steps, eta=0.0, 
-                            verbose=True, t_min=self.t_min, 
-                            **cond_inputs, cfg_scale=cfg_scale, 
-                            # batch_cfg=True
-                        )
-                        ## fakes: (B, 3C, T)
-                    elif module.diffusion_objective == "rectified_flow":
-                        raise NotImplementedError
-                        fakes = sample_discrete_euler(model, noise_mix0, self.demo_steps, verbose=True, **cond_inputs, cfg_scale=cfg_scale, batch_cfg=True)
+                if module.diffusion_objective == "v":
+                    fakes = sample_extraction(
+                        model, noise_mix0, self.demo_steps, eta=0.0, 
+                        verbose=True, t_min=self.t_min, 
+                        **cond_inputs, cfg_scale=cfg_scale, 
+                        # batch_cfg=True
+                    )
+                    ## fakes: (B, 3C, T)
+                elif module.diffusion_objective == "rectified_flow":
+                    raise NotImplementedError
+                    fakes = sample_discrete_euler(model, noise_mix0, self.demo_steps, verbose=True, **cond_inputs, cfg_scale=cfg_scale, batch_cfg=True)
 
-                    # Decode
-                    if module.diffusion.pretransform:
-                        fake_mix_z_dummy, fake_submix_z, fake_src_z = fakes.chunk(3, dim=1)
-                        fake_tracks_z = torch.cat([fake_submix_z, fake_src_z], dim=0) # (2B, C, T)
-                        fakes_tracks = module.diffusion.pretransform.decode(fake_tracks_z)
-                        # fakes_tracks: (2B, 1, T)
-                        bs = fake_submix_z.shape[0]
-                        fake_submix, fake_src = torch.chunk(fakes_tracks, 2, dim=0)
-                        
-                        ## gt mix, src wav
-                        gt_src_z = demo_cond["src_latent"] # (B, 64, 80)
-                        
-                        mix_wav = module.diffusion.pretransform.decode(mix_z)
-                        gt_src_wav = module.diffusion.pretransform.decode(gt_src_z)
-                    else:
-                        raise NotImplementedError
+                # Decode
+                if module.diffusion.pretransform:
+                    fake_mix_z_dummy, fake_submix_z, fake_src_z = fakes.chunk(3, dim=1)
+                    fake_tracks_z = torch.cat([fake_submix_z, fake_src_z], dim=0) # (2B, C, T)
+                    fakes_tracks = module.diffusion.pretransform.decode(fake_tracks_z)
+                    # fakes_tracks: (2B, 1, T)
+                    bs = fake_submix_z.shape[0]
+                    fake_submix, fake_src = torch.chunk(fakes_tracks, 2, dim=0)
+                    
+                    ## gt mix, src wav
+                    gt_src_z = demo_cond["src_latent"] # (B, 64, 80)
+                    
+                    mix_wav = module.diffusion.pretransform.decode(mix_z)
+                    gt_src_wav = module.diffusion.pretransform.decode(gt_src_z)
+                else:
+                    raise NotImplementedError
                         
                 sample_dir = os.path.join(trainer.default_root_dir, 'samples', f'{trainer.global_step:08}', 'extraction', f'cfg_{cfg_scale}')
                 os.makedirs(sample_dir, exist_ok=True)

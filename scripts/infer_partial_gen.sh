@@ -27,11 +27,6 @@ GIVEN_WAV_PATH="data_sample/bts_butter_seg.wav"
 # TEXT_PROMPT="The sound of overdrive guitar"
 # TEXT_PROMPT="Funky guitar strumming"
 TEXT_PROMPT="Funky guitar improvisation"
-# TEXT_PROMPT="Funky guitar strumming with a jazzy voicing"
-# TEXT_PROMPT="Guitar improvisation with a smooth jazzy voicing"
-# TEXT_PROMPT="Guitar improvisation with a jazzy voicing"
-# TEXT_PROMPT="Keyboard improvisation with a jazzy voicing"
-# TEXT_PROMPT="Keyboard playing chords with a jazzy voicing"
 # TEXT_PROMPT="Funky upbeat jazz with guitar"
 
 ## GEN / Inpaint Condition
