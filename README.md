@@ -4,8 +4,6 @@
 
 > **Official implementation of the paper Joint Latent Diffusion for Simultaneous Music Generation and Source Extraction.**
 
-This repository is being updated.
-
 ---
 
 ## 📋 Table of Contents
